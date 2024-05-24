@@ -42,11 +42,11 @@ export default function PessoasFormulario({ id, cancelar }) {
         }
         cancelar()
         if (!nome_ || nome_.trim() === '') {
-            alert("Por favor, preencha o campo de nome.");
+            alert("Por favor, preencha o campo de (Nome).");
             return;
         }
         if (!telefone_ || telefone_.trim() === '') {
-            alert("Por favor, preencha o campo de telefone.");
+            alert("Por favor, preencha o campo de (Telefone).");
             return;
         }
     
