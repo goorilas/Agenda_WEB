@@ -1,0 +1,33 @@
+:root {
+    --width-min: 300px;
+    --width-max: 900px;
+    --color-primary: royalblue;
+    --color-secondary: lightgrey;
+    --color-danger: red;
+    --color-warning: darkorange;
+    --color-success: green;
+    --space: 8px;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+}
+
+.container {
+    width: 100%;
+    min-width: var(--width-min);
+    max-width: var(--width-max);
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+body {
+    min-height: 100vh;
+}
+
+.container hr {
+    width: 100%;
+}
