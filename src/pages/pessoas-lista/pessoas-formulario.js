@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { PessoasListaStoreContext } from "./pessoas-lista.store"
 
 export default function PessoasFormulario({ id, cancelar }) {
@@ -9,7 +9,7 @@ export default function PessoasFormulario({ id, cancelar }) {
 
     const pessoasListaStore = useContext(PessoasListaStoreContext)
 
-    const carregar = useCallback(() => {
+    useEffect(() => {
         if (!id || !pessoasListaStore) {
             return
         }
@@ -21,11 +21,8 @@ export default function PessoasFormulario({ id, cancelar }) {
         setId_(`${pessoa.id}`)
         setNome_(pessoa.nome)
         setTelefone_(pessoa.telefone)
-    }, [id, pessoasListaStore])
-
-    useEffect(() => {
-        carregar()
-    }, [carregar])
+        // eslint-disable-next-line
+    }, [id])
 
     const salvar = () => {
         const pessoa = {}
