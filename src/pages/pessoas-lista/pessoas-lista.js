@@ -5,6 +5,7 @@ import "./pessoas-lista.css"
 import { PessoasListaStoreContext } from "./pessoas-lista.store"
 
 
+
 export default function PessoasLista() {
 
     const pessoasListaStore = useContext(PessoasListaStoreContext)
@@ -104,3 +105,4 @@ function ItemPessoas({ pessoa, excluir, editar }) {
         </li>
     )
 }
+
