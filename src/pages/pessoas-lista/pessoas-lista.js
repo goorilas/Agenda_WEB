@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Modal from "../../components/modal/modal"
 import PessoasFormulario from "./pessoas-formulario"
 import "./pessoas-lista.css"
@@ -14,18 +14,16 @@ export default function PessoasLista() {
     const [pessoaId, setPessoaId] = useState(null)
     const [openForm, setOpenForm] = useState(false)
 
-    const atualizar = useCallback(() => {
+    const atualizar = () => {
         const lista = pessoasListaStore.listar()
         setPessoas(lista)
-    }, [pessoasListaStore])
+    }
 
     useEffect(() => {
-        if (!pessoasListaStore) {
-            return
-        }
         pessoasListaStore.mockar()
         atualizar()
-    }, [pessoasListaStore, atualizar])
+        // eslint-disable-next-line
+    }, [])
 
     const excluir = (id) => {
         pessoasListaStore.deletar(id)
