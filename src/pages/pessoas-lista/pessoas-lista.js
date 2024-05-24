@@ -87,9 +87,9 @@ export default function PessoasLista() {
                                 )
                             }
                         </Modal>
+                        <hr className="border-primary container d-flex" />
                     </div>
                 </div>
-                <hr className="border-primary container" />
             </div>
 
         </div>
