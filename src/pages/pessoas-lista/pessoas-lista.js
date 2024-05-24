@@ -1,73 +1,60 @@
-import { useEffect, useState } from "react"
-import "./pessoas-lista.css"
-import * as pessoasListaStore from "./pessoas-lista.store"
+import { useCallback, useContext, useEffect, useState } from "react"
 import Modal from "../../components/modal/modal"
 import PessoasFormulario from "./pessoas-formulario"
+import "./pessoas-lista.css"
+import { PessoasListaStoreContext } from "./pessoas-lista.store"
 
 export default function PessoasLista() {
 
-    // cria a variavel pessoas que atualiza a tela sempre que é alterada
-    // a lista vazia dentro do useState serve pra dizer que ela abre a tela com esse valor
+    const pessoasListaStore = useContext(PessoasListaStoreContext)
+    
     const [pessoas, setPessoas] = useState([])
-    // se nulo cria nova pessoa, caso contrario edita a pessoa ao abrir o formulario
     const [pessoaId, setPessoaId] = useState(null)
-    // controla se o formulario esta aberto ou fechado
     const [openForm, setOpenForm] = useState(false)
 
-    // useEffect é chamado automaticamente assim que a tela abre
-    useEffect(() => {
-        // salva 9 pessoas no sessionStorage (memoria temporária do seu navegador, reinicia sempre que vc aperta F5)
-        pessoasListaStore.mockar()
-        // atualiza a lista de pessoas
-        atualizar()
-    }, [])
-
-    const atualizar = () => {
-        // pega a lista de pessoas do sessionStorage
+    const atualizar = useCallback(() => {
         const lista = pessoasListaStore.listar()
-        // deve-se usar setPessoas(lista) ao invés de "pessoas = lista", porque senão a tela não muda
         setPessoas(lista)
-    }
+    }, [pessoasListaStore])
+    
+    useEffect(() => {
+        if (!pessoasListaStore) {
+            return
+        }
+        pessoasListaStore.mockar()
+        atualizar()
+    }, [pessoasListaStore, atualizar])
 
     const excluir = (id) => {
-        // deleta a pessoa com esse id do sessionStorage
         pessoasListaStore.deletar(id)
-        // atualiza a lista de pessoas
         atualizar()
     }
 
     const editar = (id) => {
-        // indica que deve editar a pessoa
         setPessoaId(id)
-        // abre o formulario
         setOpenForm(true)
     }
 
     const inserir = () => {
-        // indica que deve inserir uma pessoa
         setPessoaId(null)
-        // abre o formulario
         setOpenForm(true)
     }
 
     const cancelar = () => {
-        // limpa a pessoa
         setPessoaId(null)
-        // fecha o formulario
         setOpenForm(false)
-        // atualiza a lista de pessoas
         atualizar()
     }
 
-    // retorna o html da página
-    // codigo javascript é aceito no html dentro de {}
     return (
         <div>
-            <h1 className="text-primary ms-2">Lista de pessoas</h1>
+            <h1 className="text-primary ms-2">Agenda</h1>
             <hr />
             <button className="btn btn-primary ms-2" onClick={() => inserir()}>Inserir</button>
             <hr />
-            {TabelaPessoas({ pessoas, excluir, editar })}
+            <ul>
+                {pessoas.map(pessoa => ItemPessoas({ pessoa, excluir, editar }))}
+            </ul>
             <Modal>
                 {
                     openForm &&
@@ -77,14 +64,6 @@ export default function PessoasLista() {
                 }
             </Modal>
         </div>
-    )
-}
-
-function TabelaPessoas({ pessoas, excluir, editar }) {
-    return (
-        <ul>
-            {pessoas.map(pessoa => ItemPessoas({ pessoa, excluir, editar }))}
-        </ul>
     )
 }
 

@@ -5,11 +5,17 @@ import reportWebVitals from './reportWebVitals';
 import PessoasLista from './pages/pessoas-lista/pessoas-lista';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle"
+import Loading from './components/loading/loading';
+import PessoasListaStore from './pages/pessoas-lista/pessoas-lista.store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <PessoasLista></PessoasLista>
+    <Loading>
+      <PessoasListaStore>
+        <PessoasLista />
+      </PessoasListaStore>
+    </Loading>
   </React.StrictMode>
 );
 

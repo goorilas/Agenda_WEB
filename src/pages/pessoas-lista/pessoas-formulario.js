@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import * as pessoasListaStore from "./pessoas-lista.store"
+import { useCallback, useContext, useEffect, useState } from "react"
+import { PessoasListaStoreContext } from "./pessoas-lista.store"
 
 export default function PessoasFormulario({ id, cancelar }) {
 
@@ -7,30 +7,32 @@ export default function PessoasFormulario({ id, cancelar }) {
     const [nome_, setNome_] = useState("")
     const [telefone_, setTelefone_] = useState("")
 
-    useEffect(() => {
-        carregar(id)
-    }, [id])
+    const pessoasListaStore = useContext(PessoasListaStoreContext)
 
-    const carregar = (pessoaId) => {
-        if(!pessoaId) {
+    const carregar = useCallback(() => {
+        if (!id || !pessoasListaStore) {
             return
         }
-        const pessoa = pessoasListaStore.obter(pessoaId)
-        if(!pessoa) {
+        const pessoa = pessoasListaStore.obter(id)
+        if (!pessoa) {
             alert("[id] - nao encontrado")
             return
         }
         setId_(`${pessoa.id}`)
         setNome_(pessoa.nome)
         setTelefone_(pessoa.telefone)
-    }
+    }, [id, pessoasListaStore])
+
+    useEffect(() => {
+        carregar()
+    }, [carregar])
 
     const salvar = () => {
         const pessoa = {}
         pessoa.id = !id_ ? null : parseInt(id_)
         pessoa.nome = nome_
         pessoa.telefone = telefone_
-        if(!id_) {
+        if (!id_) {
             pessoasListaStore.inserir(pessoa)
         } else {
             pessoasListaStore.editar(pessoa)
