@@ -1,5 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react"
 import { PessoasListaStoreContext } from "./pessoas-lista.store"
+import React from 'react';
+import { IMaskInput } from 'react-imask';
+
 
 export default function PessoasFormulario({ id, cancelar }) {
 
@@ -38,6 +41,15 @@ export default function PessoasFormulario({ id, cancelar }) {
             pessoasListaStore.editar(pessoa)
         }
         cancelar()
+        if (!nome_ || nome_.trim() === '') {
+            alert("Por favor, preencha o campo de nome.");
+            return;
+        }
+        if (!telefone_ || telefone_.trim() === '') {
+            alert("Por favor, preencha o campo de telefone.");
+            return;
+        }
+    
     }
 
     return (
@@ -55,7 +67,14 @@ export default function PessoasFormulario({ id, cancelar }) {
                 </div>
                 <div className="form-group col-12">
                     <label htmlFor="telefone">Telefone</label>
-                    <input id="telefone" className="form-control" value={telefone_} onChange={(e) => setTelefone_(e.currentTarget.value)} />
+                    <IMaskInput
+                        id="telefone"
+                        className="form-control"
+                        mask="(00) 00000-0000"
+                        placeholder="(00) 00000-0000"
+                        value={telefone_}
+                        onInput={(e) => setTelefone_(e.currentTarget.value)}
+                    />
                 </div>
             </div>
             <div className="row g-2 mt-2">
