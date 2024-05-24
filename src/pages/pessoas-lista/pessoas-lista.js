@@ -75,7 +75,9 @@ export default function PessoasLista() {
                             </h4>
                         </div>
                         <hr className="border-primary container" />
-                        <button className="btn btn-success ms-2 containder-flex col-2 mb-3" onClick={() => inserir()}>Inserir</button>
+                        <div className="d-flex justify-content-end">
+                            <button className="btn btn-success ms-2 containder col-2 mb-3 end-0" onClick={() => inserir()}>Inserir</button>
+                        </div>
                         <hr className="border-primary container" />
                         <ul>
                             {pessoas.map(pessoa => ItemPessoas({ pessoa, excluir, editar }))}
