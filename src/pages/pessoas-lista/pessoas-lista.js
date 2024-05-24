@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react"
 import "./pessoas-lista.css"
 import * as pessoasListaStore from "./pessoas-lista.store"
+import Modal from "../../components/modal/modal"
+import PessoasFormulario from "./pessoas-formulario"
 
 export default function PessoasLista() {
 
     // cria a variavel pessoas que atualiza a tela sempre que é alterada
     // a lista vazia dentro do useState serve pra dizer que ela abre a tela com esse valor
     const [pessoas, setPessoas] = useState([])
+    // se nulo cria nova pessoa, caso contrario edita a pessoa ao abrir o formulario
+    const [pessoaId, setPessoaId] = useState(null)
+    // controla se o formulario esta aberto ou fechado
+    const [openForm, setOpenForm] = useState(false)
 
     // useEffect é chamado automaticamente assim que a tela abre
     useEffect(() => {
@@ -31,29 +37,24 @@ export default function PessoasLista() {
     }
 
     const editar = (id) => {
-        // pega a pessoa com esse id do sessionStorage
-        const pessoa = pessoasListaStore.obter(id)
-        // exibe um alerta e captura o que o usuario digita
-        pessoa.nome = prompt("Digite o nome:", pessoa.nome)
-        // exibe um alerta e captura o que o usuario digita
-        pessoa.telefone = prompt("Digite o telefone:", pessoa.telefone)
-        // salva as alteraçoes da pessoa no sessionStorage
-        pessoasListaStore.editar(pessoa)
-        // atualiza a lista de pessoas
-        atualizar()
+        // indica que deve editar a pessoa
+        setPessoaId(id)
+        // abre o formulario
+        setOpenForm(true)
     }
 
     const inserir = () => {
-        // cria uma pessoa sem id, pois ele será criado automaticamente pelo store
-        const pessoa = {
-            id: null,
-        }
-        // exibe um alerta e captura o que o usuario digita
-        pessoa.nome = prompt("Digite o nome:")
-        // exibe um alerta e captura o que o usuario digita
-        pessoa.telefone = prompt("Digite o telefone:")
-        // adiciona a nova pessoa no sessionStorage
-        pessoasListaStore.inserir(pessoa)
+        // indica que deve inserir uma pessoa
+        setPessoaId(null)
+        // abre o formulario
+        setOpenForm(true)
+    }
+
+    const cancelar = () => {
+        // limpa a pessoa
+        setPessoaId(null)
+        // fecha o formulario
+        setOpenForm(false)
         // atualiza a lista de pessoas
         atualizar()
     }
@@ -67,6 +68,14 @@ export default function PessoasLista() {
             <button className="btn btn-primary ms-2" onClick={() => inserir()}>Inserir</button>
             <hr />
             {TabelaPessoas({ pessoas, excluir, editar })}
+            <Modal>
+                {
+                    openForm &&
+                    (
+                        <PessoasFormulario id={pessoaId} cancelar={cancelar} />
+                    )
+                }
+            </Modal>
         </div>
     )
 }
@@ -81,7 +90,7 @@ function TabelaPessoas({ pessoas, excluir, editar }) {
 
 function ItemPessoas({ pessoa, excluir, editar }) {
     return (
-        <li className="my-1">
+        <li className="my-1" key={pessoa.id}>
             <button className="btn btn-danger" onClick={() => excluir(pessoa.id)}>excluir</button>
             <button className="btn btn-warning mx-2" onClick={() => editar(pessoa.id)}>editar</button>
             {pessoa.nome} | {pessoa.telefone}
