@@ -63,15 +63,19 @@ export default function PessoasFormulario({ id, cancelar }) {
                     <input id="nome" className="form-control" value={nome_} onChange={(e) => setNome_(e.currentTarget.value)} />
                 </div>
                 <div className="form-group col-12">
-                    <label htmlFor="telefone">Telefone</label>
+                    <label htmlFor="telefone2">Telefone2</label>
                     <IMaskInput
-                        id="telefone"
+                        id="telefone2"
                         className="form-control"
                         mask="(00) 00000-0000"
                         placeholder="(00) 00000-0000"
                         value={telefone_}
                         onInput={(e) => setTelefone_(e.currentTarget.value)}
                     />
+                </div>
+                <div className="form-group col-12">
+                    <label htmlFor="telefone">Telefone</label>
+                    <input id="telefone" className="form-control" value={formatarTelefone(telefone_)} onChange={(e) => setTelefone_(e.currentTarget.value)} />
                 </div>
             </div>
             <div className="row g-2 mt-2">
@@ -84,4 +88,27 @@ export default function PessoasFormulario({ id, cancelar }) {
             </div>
         </div>
     )
+}
+
+
+function formatarTelefone(texto) {
+    // retira tudo que nao é numero
+    let numeros = texto.replace(/[^0-9]/g, "")
+    // se tiver mais de 11 digitos apaga o excesso
+    if(numeros.length > 11) {
+        numeros = numeros.substring(0, 11)
+    }
+    // se tiver menos de 10 digitos preenche com underline 
+    if(numeros.length < 10) {
+        numeros = numeros + "_".repeat(10 - numeros.length) 
+    }
+    // começando da posicao 0, pega 2 digitos, ex: 1234567890_ ---> 12..34567890_ ---> 12
+    const ddd = numeros.substring(0, 2)
+    // começando da posicao 2, pega ate faltar 4 digitos, ex: 1234567890_ ---> 12..34567..890_ ---> 34567
+    const parte1 = numeros.substring(2, numeros.length - 4)
+    // começando da posicao ate faltar 4 digitos, pega tudo, ex: 1234567890_ ---> 1234567..890_ ---> 890_
+    const parte2 = numeros.substring(numeros.length - 4)
+    // formata o resultado (12) 34567-890_
+    const resultado = `(${ddd}) ${parte1}-${parte2}`
+    return resultado
 }
